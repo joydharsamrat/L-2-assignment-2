@@ -16,7 +16,6 @@ const handelCreateProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message || "Something went wrong",
@@ -25,9 +24,25 @@ const handelCreateProduct = async (req: Request, res: Response) => {
   }
 };
 
-// get all products from db
-const handelGetAllProducts = async (req: Request, res: Response) => {
+// get all/searched products from db
+const handelGetAllOrSearchedProducts = async (req: Request, res: Response) => {
   try {
+    const { searchTerm } = req.query;
+
+    // if searched for products
+    if (searchTerm) {
+      const result = await productServices.getSearchedProducts(
+        searchTerm as string
+      );
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term " ${searchTerm} " fetched successfully!`,
+        data: result,
+      });
+      return;
+    }
+
+    // get all products
     const result = await productServices.getAllProducts();
     res.status(200).json({
       success: true,
@@ -48,6 +63,7 @@ const handelGetProductById = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
     const result = await productServices.getProductById(productId);
+
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",
@@ -62,8 +78,77 @@ const handelGetProductById = async (req: Request, res: Response) => {
   }
 };
 
+// update product
+const handelUpdateProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const product = req.body;
+
+    const validatedProduct = productValidationSchema.parse(product);
+
+    const result = await productServices.updateProduct(
+      productId,
+      validatedProduct
+    );
+
+    // if product not found
+    if (result?.matchedCount === 0) {
+      res.status(404).json({
+        success: false,
+        message: "Product not found",
+        data: result,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product Updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+      error,
+    });
+  }
+};
+
+// delete product
+const handelDeleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+
+    const result = await productServices.deleteProduct(productId);
+
+    // if product not found
+    if (result?.deletedCount === 0) {
+      res.status(404).json({
+        success: false,
+        message: "Product not found",
+        data: result,
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product Deleted successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+      error,
+    });
+  }
+};
+
 export const productControllers = {
   handelCreateProduct,
-  handelGetAllProducts,
+  handelGetAllOrSearchedProducts,
   handelGetProductById,
+  handelUpdateProduct,
+  handelDeleteProduct,
 };

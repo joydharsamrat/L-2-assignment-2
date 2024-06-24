@@ -25,4 +25,25 @@ const handleCreateOrder = async (req: Request, res: Response) => {
   }
 };
 
-export const orderControllers = { handleCreateOrder };
+// get all orders
+const handleGetAllOrders = async (req: Request, res: Response) => {
+  try {
+    const result = await orderServices.getallOrders();
+    res.status(200).json({
+      success: true,
+      message: "Orders Fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+      error,
+    });
+  }
+};
+
+export const orderControllers = {
+  handleCreateOrder,
+  handleGetAllOrders,
+};

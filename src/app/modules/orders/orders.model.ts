@@ -35,7 +35,7 @@ orderSchema.statics.checkAvailableQuantity = async function (
 };
 
 // update product inventory
-orderSchema.statics.updateProductQuantity = async function (
+orderSchema.statics.updateProductInventory = async function (
   productId: string,
   orderedQuantity: number,
   availableQuantity: number

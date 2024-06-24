@@ -15,12 +15,12 @@ const createOrder = async (order: TOrder) => {
     throw new Error("Product not found");
   }
 
-  //   if available quantity is sufficient
+  //  if available quantity is sufficient create order
   const result = await orderModel.create(order);
 
-  //   update product quantity
+  //   update product inventory
   if (result) {
-    const updatedData = await orderModel.updateProductQuantity(
+    const updatedData = await orderModel.updateProductInventory(
       order.productId,
       order.quantity,
       availableQuantity
@@ -30,6 +30,13 @@ const createOrder = async (order: TOrder) => {
   return result;
 };
 
+// fetch all orders
+const getallOrders = async () => {
+  const result = await orderModel.find({});
+  return result;
+};
+
 export const orderServices = {
   createOrder,
+  getallOrders,
 };

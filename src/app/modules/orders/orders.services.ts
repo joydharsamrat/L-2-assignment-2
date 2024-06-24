@@ -17,6 +17,16 @@ const createOrder = async (order: TOrder) => {
 
   //   if available quantity is sufficient
   const result = await orderModel.create(order);
+
+  //   update product quantity
+  if (result) {
+    const updatedData = await orderModel.updateProductQuantity(
+      order.productId,
+      order.quantity,
+      availableQuantity
+    );
+  }
+
   return result;
 };
 

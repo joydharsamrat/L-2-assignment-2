@@ -9,4 +9,9 @@ export type TOrder = {
 
 export interface Order extends Model<TOrder> {
   checkAvailableQuantity(productId: string): Promise<number | null>;
+  updateProductQuantity(
+    productId: string,
+    orderedQuantity: number,
+    availableQuantity: number
+  ): Promise<{} | null>;
 }

@@ -6,7 +6,10 @@ import { orderServices } from "./orders.services";
 const handleCreateOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
+
+    // validate order data using zod
     const validatedOrder = orderValidationSchema.parse(order);
+
     const result = await orderServices.createOrder(validatedOrder);
     res.status(200).json({
       success: true,

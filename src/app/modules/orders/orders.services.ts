@@ -20,7 +20,7 @@ const createOrder = async (order: TOrder) => {
 
   //   update product inventory
   if (result) {
-    const updatedData = await orderModel.updateProductInventory(
+    await orderModel.updateProductInventory(
       order.productId,
       order.quantity,
       availableQuantity
@@ -36,7 +36,14 @@ const getallOrders = async () => {
   return result;
 };
 
+// get orders by user
+const getOrdersByUser = async (email: string) => {
+  const result = await orderModel.find({ email: email });
+  return result;
+};
+
 export const orderServices = {
   createOrder,
   getallOrders,
+  getOrdersByUser,
 };

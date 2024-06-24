@@ -25,9 +25,23 @@ const handleCreateOrder = async (req: Request, res: Response) => {
   }
 };
 
-// get all orders
-const handleGetAllOrders = async (req: Request, res: Response) => {
+// get all or user specific orders
+const handleGetOrders = async (req: Request, res: Response) => {
   try {
+    const { email } = req.query;
+
+    // orders for specific user
+    if (email) {
+      const result = await orderServices.getOrdersByUser(email as string);
+      res.status(200).json({
+        success: true,
+        message: `Orders Fetched successfully for ${email}`,
+        data: result,
+      });
+      return;
+    }
+
+    // all orders
     const result = await orderServices.getallOrders();
     res.status(200).json({
       success: true,
@@ -45,5 +59,5 @@ const handleGetAllOrders = async (req: Request, res: Response) => {
 
 export const orderControllers = {
   handleCreateOrder,
-  handleGetAllOrders,
+  handleGetOrders,
 };

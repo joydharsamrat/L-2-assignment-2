@@ -1,8 +1,12 @@
-type Order = {
+import { Model } from "mongoose";
+
+export type TOrder = {
   email: string;
   productId: string;
   price: number;
   quantity: number;
 };
 
-export default Order;
+export interface Order extends Model<TOrder> {
+  checkAvailableQuantity(productId: string): Promise<number | null>;
+}

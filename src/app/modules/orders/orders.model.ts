@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
-import Order from "./orders.interface";
-import Order from "./orders.interface";
+import { Order, TOrder } from "./orders.interface";
+import { productModel } from "../products/products.model";
 
-const orderSchema = new Schema<Order>({
+const orderSchema = new Schema<TOrder, Order>({
   email: {
     type: String,
     required: [true, "User Email is required"],
@@ -22,4 +22,14 @@ const orderSchema = new Schema<Order>({
   },
 });
 
-export const orderModel = model<Order>("order", orderSchema);
+orderSchema.statics.checkAvailableQuantity = async function (
+  productId: string
+) {
+  const quantity = await productModel.find(
+    { _id: productId },
+    { _id: 0, quantity: 1 }
+  );
+  return quantity;
+};
+
+export const orderModel = model<TOrder, Order>("order", orderSchema);

@@ -93,11 +93,7 @@ const handelUpdateProduct = async (req: Request, res: Response) => {
 
     // if product not found
     if (result?.matchedCount === 0) {
-      res.status(404).json({
-        success: false,
-        message: "Product not found",
-        data: result,
-      });
+      throw new Error("Product not found");
     }
 
     res.status(200).json({
@@ -123,12 +119,7 @@ const handelDeleteProduct = async (req: Request, res: Response) => {
 
     // if product not found
     if (result?.deletedCount === 0) {
-      res.status(404).json({
-        success: false,
-        message: "Product not found",
-        data: result,
-      });
-      return;
+      throw new Error("Product not found");
     }
 
     res.status(200).json({

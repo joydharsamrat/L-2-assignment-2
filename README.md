@@ -27,7 +27,7 @@ PORT=5000
 ## Run the application
 
 ```sh
-npm run dev //run with nodemon
+npm run dev //run with nodemon (you will need to install nodemon if not already installed)
 npm run prod //run with node
 npm run dev:ts //run with ts node dev
 ```

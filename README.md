@@ -28,6 +28,6 @@ PORT=5000
 
 ```sh
 npm run dev //run with nodemon
-npm run dev:node //run with node
+npm run prod //run with node
 npm run dev:ts //run with ts node dev
 ```

@@ -22,6 +22,7 @@ const orderSchema = new Schema<TOrder, Order>({
   },
 });
 
+// static method to check available quantity of ordered product before ordering//
 orderSchema.statics.checkAvailableQuantity = async function (
   productId: string
 ) {
